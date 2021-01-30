@@ -10,6 +10,8 @@ I've been asked for the design files many times since I first showed it off in o
 
 # Printing The 3D Pieces
 
+### NOTE: The main parts for this turntable require a 3D printer with a print bed of 200mm x 200mm or larger.
+
 There are 3 main 3d printed pieces that make up the turntable, plus some extras.
 
 ## turntable_V3_base.stl
@@ -61,7 +63,10 @@ I made a video about the turntable and how to assemble it:
 [![](http://img.youtube.com/vi/scHSrFdWn5k/0.jpg)](http://www.youtube.com/watch?v=scHSrFdWn5k "Assembly Instructions")
 
 
-Enjoy!
+I hope you enjoy making and using this design. If you do, please contact me and let me know you made one and maybe send me a pic!
+
+Cheers :)
+
 
 # Support Unexpected Maker
 
@@ -82,6 +87,8 @@ https://discord.com/invite/xAHpApP
 
 
 # Unexpected Maker
+https://unexpectedmaker.com
+
 http://youtube.com/unexpectedmaker
 
 http://twitter.com/unexpectedmaker
