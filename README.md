@@ -24,7 +24,7 @@ There are 3 main 3d printed pieces that make up the turntable, plus some extras.
 
 - Layer height: 0.2mm
 - Brim: Yes
-- Supports: None
+- Supports: Yes, from build plate + bridging
 
 ## turntable_V3_assembly_tray.stl
 
