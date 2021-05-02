@@ -16,5 +16,7 @@ Part B has 2 variants - with hole for bearing access and without one. Print only
 - turntable_parts_tray_partB_hole.stl
 - rntable_parts_tray_partB_nohole.stl
 
+Note: if you use 2 parts part tray there is a bonus: you can use part B to cut rubber and you do not need top print turntable_V3_rubber_cutter.stl
+
 Enjoy.
 
