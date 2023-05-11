@@ -92,7 +92,7 @@ module base() {
             }
             
             cylinder( d=component_bearing_odia+4,h=base_innerloop_thk+7.8-component_bearing_height,$fn=64 );
-            cylinder( d=component_bearing_odia-2*tolerance,h=base_innerloop_thk+6.6,$fn=128 );
+            cylinder( d=component_bearing_idia-2*tolerance,h=base_innerloop_thk+6.6,$fn=128 );
             cylinder( d=part_bearing_idia+3,h=base_innerloop_thk+15-part_bearing_height,$fn=64 );
             cylinder( d=part_bearing_idia-2*tolerance,h=base_innerloop_thk+13.6,$fn=64 );
         }
