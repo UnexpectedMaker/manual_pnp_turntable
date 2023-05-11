@@ -1,5 +1,18 @@
+/* [show] */
+showComponentTray=true;
+showPartsTray=true;
+showBase=true;
+showBearings=true;
+showCover=true;
+partTrayVariant = 1; //[1: "single",2 : "split main", 3 : "split bearing"]
+partTrayHole = true;
+export = "none"; //["none","base", "component_tray", "parts_tray"]
+/* [Common Dimensions] */
 tolerance = 0.05;
+//facets unless otherwise defined
+$fn=50;
 
+/* [Tray Dimensions] */
 component_tray_dia = 182;
 component_tray_height = 8.6;
 component_tray_inner_idia = 39.8;
@@ -8,16 +21,19 @@ component_tray_inner_thk = 2;
 component_tray_hole_dia = 29.6;
 component_tray_stopper_hole_dia=5;
 
+/* [Pocket Dimensions] */
 component_pocket_idia = 121;
 component_pocket_odia = 179;
 component_pocket_length = 29;
 component_pocket_depth = 8.1;
 component_pocket_angle = 8;
 
+/* [Component Bearing] */
 component_bearing_idia = 25;
 component_bearing_odia = 37;
 component_bearing_height = 6;
 
+/* [Parts Tray Dimensions] */
 parts_outer_dia = 126;
 parts_inner_dia = 90;
 parts_border = 3;
@@ -32,18 +48,58 @@ part_bearing_idia = 8;
 part_bearing_odia = 22;
 part_bearing_height = 7;
 
+/* [Base] */
 base_height = 17;
 base_outer_dia = component_tray_dia + 8;
 base_outerloop_odia = component_tray_dia + 4;
 base_outerloop_idia = base_outerloop_odia - 46;
 base_sector_angle = 45;
 
+/* [cover] */
 cover_something_width = 15;
 cover_thk = 3;
 
+/* [Hidden] */
 base_innerloop_odia = 50;
 base_outerloop_thk = 3;
 base_innerloop_thk = base_outerloop_thk;
+
+/* [Colors] */
+baseColor="darkSlateGrey";
+componentTrayColor="darkOrange";
+partTrayColor="Orange";
+
+small_bearing_zOffset=base_innerloop_thk+15-part_bearing_height+tolerance;
+large_bearing_zOffset=base_innerloop_thk+7.8-component_bearing_height+tolerance;
+component_tray_zOffset=large_bearing_zOffset+component_bearing_height-(component_tray_height-2)+tolerance;
+partsTray_zOffset=small_bearing_zOffset+part_bearing_height+tolerance;
+cover_zOffset=base_height-cover_thk+tolerance;
+
+// --- Assembly ---
+if (export=="none"){
+    if (showBase)
+        color(baseColor) base();
+    if (showComponentTray)
+        color(componentTrayColor) translate([0,0,component_tray_zOffset]) component_tray();
+    if (showBearings){
+    //large Bearing
+    translate([0,0,large_bearing_zOffset]) color("silver") bearing(component_bearing_odia, component_bearing_idia, component_bearing_height);
+    //small Bearing
+    translate([0,0,small_bearing_zOffset]) color("silver") bearing(part_bearing_odia, part_bearing_idia, part_bearing_height);
+    }
+    if (showPartsTray)
+        color(partTrayColor) translate([0,0,partsTray_zOffset]) parts_tray(partTrayHole,partTrayVariant);
+    if (showCover)
+        color("grey",0.3) translate([0,0,cover_zOffset]) cover();
+}
+// --- Export ---
+else if (export=="base")
+    base();
+else if (export=="component_tray")
+    component_tray();
+else if (export=="parts_tray")
+    parts_tray(partTrayHole,partTrayVariant);
+
 
 module sector(h, d, a1, a2) {
     if (a2 - a1 > 180) {
@@ -62,6 +118,7 @@ module sector(h, d, a1, a2) {
     }
 }    
 
+*base();
 module base() {
     difference() {
         union() {
@@ -92,7 +149,7 @@ module base() {
             }
             
             cylinder( d=component_bearing_odia+4,h=base_innerloop_thk+7.8-component_bearing_height,$fn=64 );
-            cylinder( d=component_bearing_odia-2*tolerance,h=base_innerloop_thk+6.6,$fn=128 );
+            cylinder( d=component_bearing_idia-2*tolerance,h=base_innerloop_thk+6.6,$fn=128 );
             cylinder( d=part_bearing_idia+3,h=base_innerloop_thk+15-part_bearing_height,$fn=64 );
             cylinder( d=part_bearing_idia-2*tolerance,h=base_innerloop_thk+13.6,$fn=64 );
         }
@@ -106,6 +163,8 @@ module base() {
     }
 }
 
+*component_pocket();
+//one pocket for componets tray
 module component_pocket()
 {
     hull() {
@@ -131,6 +190,7 @@ module component_pocket()
     }
 }
 
+*component_tray();
 module component_tray()
 {
     difference() {
@@ -162,7 +222,7 @@ module component_tray()
           2 - two modules maint part
           3 - two modeles bearing part
 */
-
+*parts_tray();
 module parts_tray(hole=1,part=1)
 {
     difference() {
@@ -203,3 +263,29 @@ module parts_tray(hole=1,part=1)
     }
 }
 
+*cover();
+module cover(){
+    $fn=128;
+    linear_extrude(cover_thk){
+      difference(){
+        union(){
+          circle(d=base_outerloop_odia-tolerance*2);
+            intersection(){
+                circle(d=base_outer_dia);
+                union(){
+                    square([base_outer_dia+0.1,cover_something_width-2*tolerance],true);
+                    square([cover_something_width-2*tolerance,base_outer_dia+0.1],true);
+                }
+            }
+        }
+        circle(d=30);
+    }
+    }
+}
+
+module bearing(oDia,iDia,height){
+    linear_extrude(height) difference(){
+        circle(d=oDia);
+        circle(d=iDia);
+    }
+}
